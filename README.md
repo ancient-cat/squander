@@ -103,20 +103,20 @@ The application, scene manager, and UI root are shared singletons. Keep that in 
 
 ## Commands and validation
 
-| Command                      | Purpose                                                                            |
-| ---------------------------- | ---------------------------------------------------------------------------------- |
-| `npm run dev`                | Start the documentation/demo development server.                                   |
-| `npm run check`              | Generate SvelteKit types and run Svelte/TypeScript checks.                         |
-| `npm run check:watch`        | Watch Svelte/TypeScript checks.                                                    |
-| `npm run lint`               | Check repository formatting, then run ESLint.                                      |
-| `npm run format`             | Rewrite formatting throughout the repository.                                      |
-| `npm run test:unit -- --run` | Run Vitest once, suitable for agents and CI.                                       |
-| `npm run test:unit`          | Start Vitest in its normal interactive/watch mode.                                 |
-| `npm run test:integration`   | Run Playwright; its web server builds the project and starts preview on port 4173. |
-| `npm test`                   | Run browser tests, then Vitest without the explicit one-shot flag.                 |
-| `npm run package`            | Generate library output in `dist/` and validate it with Publint.                   |
-| `npm run build`              | Build the static site, then package the library.                                   |
-| `npm run preview`            | Serve an existing site build locally.                                              |
+| Command                    | Purpose                                                                            |
+| -------------------------- | ---------------------------------------------------------------------------------- |
+| `npm run dev`              | Start the documentation/demo development server.                                   |
+| `npm run check`            | Generate SvelteKit types and run Svelte/TypeScript checks.                         |
+| `npm run check:watch`      | Watch Svelte/TypeScript checks.                                                    |
+| `npm run lint`             | Check repository formatting, then run ESLint.                                      |
+| `npm run format`           | Rewrite formatting throughout the repository.                                      |
+| `npm run test:unit`        | Run the Vitest unit suite once.                                                    |
+| `npm run test:unit:watch`  | Run Vitest in interactive watch mode.                                              |
+| `npm run test:integration` | Run Playwright; its web server builds the project and starts preview on port 4173. |
+| `npm test`                 | Run the Playwright browser tests, then the Vitest unit suite.                      |
+| `npm run package`          | Generate library output in `dist/` and validate it with Publint.                   |
+| `npm run build`            | Build the static site, then package the library.                                   |
+| `npm run preview`          | Serve an existing site build locally.                                              |
 
 Install Playwright's browser before the first integration run if it is not already available:
 
@@ -124,7 +124,7 @@ Install Playwright's browser before the first integration run if it is not alrea
 npx playwright install chromium
 ```
 
-Automated coverage is currently minimal: the unit test checks arithmetic, and the browser test checks that the home page has a visible heading. Vitest discovers `src/**/*.{test,spec}.{js,ts}`; files such as `battle_test.ts` and the separate `test/` directory are not included by that pattern. Passing these tests does not establish that scene lifecycle, rendering, input, or UI behavior is correct.
+The unit suite covers observable stores, signals, event dispatch, keyboard mapping, game time, ECS operations, and scene lifecycle. Playwright checks the project landing page and documentation navigation. Vitest discovers `src/**/*.{test,spec}.{js,ts}`; files such as `battle_test.ts` and the separate `test/` directory are not included by that pattern. Rendering changes still require exercising the relevant demo in a browser.
 
 For code changes, run checks relevant to the touched area, add focused behavior tests where practical, and exercise the affected demo in a browser. Use `npm run package` for public API changes and `npm run build` for site/build changes. Record existing failures separately from failures introduced by a change. For documentation-only changes, a targeted formatting check is sufficient:
 

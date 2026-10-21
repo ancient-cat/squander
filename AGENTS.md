@@ -12,7 +12,7 @@ Documentation is under `src/routes/(docs)/`; playable examples are under `src/ro
 - `npm run dev`: start the local docs and demo server.
 - `npm run check`: run Svelte and TypeScript diagnostics.
 - `npm run lint`: check Prettier formatting and ESLint rules.
-- `npm run test:unit -- --run`: run Vitest once; omit `--run` for watch mode.
+- `npm run test:unit`: run Vitest once; use `npm run test:unit:watch` for watch mode.
 - `npm run test:integration`: run browser tests with Playwright.
 - `npm run package`: build `dist/` and validate package exports with Publint.
 - `npm run build`: build both the static site and library package.

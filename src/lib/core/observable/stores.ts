@@ -31,9 +31,7 @@ export const create_writable = <T>(initial_value: T, start?: StartStopNotifier<T
     has_subscribers = subscribers.size > 0;
 
     if (subscribers.size === 1) {
-      if (start !== undefined) {
-        stop = start(set, update) ?? noop;
-      }
+      stop = start?.(set, update) ?? noop;
     }
 
     callback(inner_value);

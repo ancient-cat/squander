@@ -11,7 +11,7 @@ export type GameTimer = {
     time: Seconds,
     callback: (...args: CallbackArgs) => CallbackResult,
   ) => (...args: CallbackArgs) => readonly [boolean, CallbackResult] | readonly [boolean];
-  create_interval: (period: Seconds, callback: Function) => () => void;
+  create_interval: (period: Seconds, callback: () => void) => () => void;
 };
 
 // This many ticks will trigger for _less_ low-level timer checks
@@ -26,14 +26,15 @@ export const GameTime: GameTimer = {
   get_elapsed: () => elapsed_time,
   get_ticks: () => ticks,
   update(dt) {
+    const delta_seconds = dt / 1000;
     ticks += 1;
-    elapsed_time += dt;
+    elapsed_time += delta_seconds;
 
     // const items = ECS.query("gametime");
     // items.forEach((item) => item.gametime.update(elapsed_time, dt));
 
     if (ticks % SAFE_TICK_COUNT === 0) {
-      safe_tick.emit([elapsed_time, dt]);
+      safe_tick.emit([elapsed_time, delta_seconds]);
     }
   },
 
@@ -47,7 +48,7 @@ export const GameTime: GameTimer = {
     }
 
     await new Promise<void>((resolve) => {
-      const unsub = safe_tick.subscribe(([elapsed, delta]) => {
+      const unsub = safe_tick.subscribe(([elapsed]) => {
         if (elapsed >= target) {
           unsub();
           resolve();
@@ -76,7 +77,7 @@ export const GameTime: GameTimer = {
     const start = elapsed_time;
     let next = start + period;
 
-    const unsub = safe_tick.subscribe(([elapsed, delta]) => {
+    const unsub = safe_tick.subscribe(() => {
       if (elapsed_time >= next) {
         next = elapsed_time + period;
         callback();
